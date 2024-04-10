@@ -11,6 +11,6 @@ services:
     environment:
       - HOST_USER_ID=1000
     volumes:
-      - ./docs:/docs
+      - ${DOCS_PATH}:/docs
     ports:
       - "3000:3000"
