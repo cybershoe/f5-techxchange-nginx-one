@@ -39,10 +39,6 @@ comfortable accessing resources in UDF using SSH.
 
 2.  Select the “NGINX One” product from the home screen.
 
-<!--
-<img src="media/image1.png)
-![NGINX One in the XC Console]
--->
     ![NGINX One in the XC Console](media/image1.png)
 
 3.  The NGINX One welcome screen will appear. Click “Visit Service” to
