@@ -43,12 +43,12 @@ comfortable accessing resources in UDF using SSH.
 <img src="media/image1.png)
 ![NGINX One in the XC Console]
 -->
-![NGINX One in the XC Console](media/image1.png)
+    ![NGINX One in the XC Console](media/image1.png)
 
 3.  The NGINX One welcome screen will appear. Click “Visit Service” to
     process to the NGINX One console.
 
-![The NGINX One Welcome Screen](media/image2.png)
+    ![The NGINX One Welcome Screen](media/image2.png)
 
 4.  The NGINX One Dashboard shows an overview of your environment,
     including availability, platform and version distribution, and
@@ -56,23 +56,31 @@ comfortable accessing resources in UDF using SSH.
     depending on what is installed in your tenant. Feel free to click
     around and explore.
 
-![NGINX One Dashboard](media/image3.png)
+    ![NGINX One Dashboard](media/image3.png)
 
 5.  In the left-hand menu in the “Manage” section is the “Instances”
     link. You may or may not have any existing instances in your tenant.
     Don’t worry if there aren’t any, you will be deploying two instances
     later in the lab. If there are any existing instances, click an
-    instance’s hostname to view its details. Feel free to explore this
-    screen.
+    instance’s hostname to view its details.
 
-![NGINX One instance details](media/image4.png)
+    ![NGINX One instance details](media/image4.png)
+
+6.  Review the following demo for an overview of the types of data and
+    findings available from the NGINX One Dashboard:
+
+    [Vivun Demo Automation - NGINX One](https://app.revel.vivun.com/demos/13885df7-5333-4182-8d57-fcba3d0cbd28/paths/4be83a03-f942-4eb2-80db-174046d15e0c)
+
+    > :point_right: **Note:** You may experience rendering issues viewing the
+    > demo on a smaller screen. Try maximizing your browser window if you
+    > experience any issues.
 
 # Lab 2: Connecting NGINX Plus to NGINX One
 
 NGINX One uses an agent installed alongside NGINX to communicate with
 the NGINX One service.
 
-![There are two instances in the customer environment: one Plus and one OSS. An additional NGINX Agent is installed alongside NGINX in each instance, and the Agent communicates between the NGINX instance and the NGINX One service.](media/image5.png)
+    ![There are two instances in the customer environment: one Plus and one OSS. An additional NGINX Agent is installed alongside NGINX in each instance, and the Agent communicates between the NGINX instance and the NGINX One service.](media/image5.png)
 
 The agent uses a Data Plane Key to authenticate and identify itself to
 NGINX One. In this lab we will create a new Data Plane Key, and use it
@@ -109,18 +117,18 @@ available as well.
 
 4.  Log into the jumphost with the username “user” and password “user”.
 
-![Jumphost login](media/image6.png)
+    ![Jumphost login](media/image6.png)
 
 5.  Click the “Terminal Emulator” icon in the dock to open a terminal.
 
 6.  Enter the following command, substituting “\<ip address”\> with the
     address of the system you are connecting to.
 
-```bash
+    ```bash
 ssh ubuntu@<ip address>
-```
+    ```
 
-![Jumphost screenshot ](media/image7.png)
+    ![Jumphost screenshot](media/image7.png)
 
 ## Generating a Data Plane Key
 
@@ -133,15 +141,21 @@ ssh ubuntu@<ip address>
     object, so be sure to name it in a way that identifies it as yours.
     A suggested format is “\<yourname\>-techxchange-nginx-plus-key”.
 
+    > :point_right: **Note:** You are working in a shared tenant; keep
+    > track of your resources, and be careful not to accidently modify
+    > anyone else's.
+
 4.  Click “Generate”
 
-![Generating a Data Plane Key](media/image8.png)
+    ![Generating a Data Plane Key](media/image8.png)
 
 5.  The Data Plane Key will be displayed. Click the “Copy” icon to copy
-    the key to the clipboard. **SAVE THIS KEY SOMEWHERE SAFE.** There is
-    no way to retrieve the key after you click close.
+    the key to the clipboard. 
+    
+    > :warning: **Warning:** *SAVE THIS KEY SOMEWHERE SAFE.* There is
+    > no way to retrieve the key after you click close.
 
-![Data Plane Key](media/image9.png)
+    ![Data Plane Key](media/image9.png)
 
 ## Installing NGINX Agent
 
@@ -149,23 +163,28 @@ ssh ubuntu@<ip address>
     SSH or through the jumphost. If connecting through the jumphost, the
     SSH command will be:
 
-```bash
+    ```bash
 ssh ubuntu@10.1.1.4
-```
+    ```
 
 2.  Because the hostname is used as the instance's name in NGINX One,
     you should change it to something that that identifies the host
     belongs to your. Ensure that you are working on the NGINX Plus
-    instance (default hostname ip-10.1.1.4), and run the following
+    instance (default hostname ip-10-1-1-4), and run the following
     command, substituting “\<yourname\>” with a string that identifies
     you as the user. Use only lowercase characters and hyphens. Note
     that the bash prompt will not update immediately; it will continue
     showing the previous hostname until you log out and log back in.
     This does not affect the lab.
 
-```bash
+    ```bash
 sudo hostname <yourname>-techxchange-nginx-plus
-```
+    ```
+
+    > :point_right: **Note:** If you don't change the hostname, it will
+    > appear as `ip-10-1-1-4` in the console, along with everybody
+    > else who didn't change the hostname, and you won't be able to
+    > easily identify your instance later.
 
 3.  Observe the running NGINX instance on this machine.
 
@@ -175,7 +194,7 @@ sudo hostname <yourname>-techxchange-nginx-plus
     2.  If you are connecting directly through UDF, locate the “NGINX
         Plus” component and select the “NGINX HTTP” access method.
 
-![NGINX Plus demo page ](media/image10.png)
+    ![NGINX Plus demo page ](media/image10.png)
 
 4.  From the NGINX Plus instance, run the following command to install
     the NGINX Agent. Substitute \<data plane key\> with the key you
@@ -185,15 +204,15 @@ sudo hostname <yourname>-techxchange-nginx-plus
     the agent to connect to and the instance will appear as “Offline”.
     If this occurs, return to step 1 and create a new Data Plane Key.
 
-```bash
+    ```bash
 curl https://agent.connect.nginx.com/nginx-agent/install \|
 DATA_PLANE_KEY=<data plane key> sh -s -- -y
-```
+    ```
 
-The install script will install any necessary dependencies and install
-the NGINX Agent with the appropriate settings for your system. You will
-see a warning about “stub_status” not being configured. You can ignore
-that warning for the moment.
+    The install script will install any necessary dependencies and install
+    the NGINX Agent with the appropriate settings for your system. You will
+    see a warning about “stub_status” not being configured. You can ignore
+    that warning for the moment.
 
 5.  Return to the NGINX One console. From the left menu in the “Manage”
     section, click “Instances”.
@@ -201,11 +220,11 @@ that warning for the moment.
 6.  You should see your new instance in the list. Click its hostname to
     view the instance details.
 
-![NGINX One Instance List](media/image11.png)
+    ![NGINX One Instance List](media/image11.png)
 
 7.  Explore the instance details:
 
-![NGINX Plus instance details](media/image12.png)
+    ![NGINX Plus instance details](media/image12.png)
 
 # Lab 3: Configuration Suggestions
 
@@ -224,25 +243,25 @@ One.
     the “stub_status” directive. You will need to use sudo to edit the
     file For example:  
       
-vi:
-```bash
+    vi:
+    ```bash
 sudo vi /etc/nginx/conf.d/demo.conf
-```
+    ```
 
-nano:
-```bash
+    nano:
+    ```bash
 sudo nano /etc/nginx/conf.d/demo.conf
-```
+    ```
 
-Add the following location block to the server block:
-```
+    Add the following location block to the server block:
+    ```
     location = /basic_status {
         stub_status;
     }
-```
+    ```
 
-The file should like this:
-```
+    The file should like this:
+    ```
 server {
     listen 80 default_server;
     server_name app_server;
@@ -268,13 +287,13 @@ server {
         stub_status;
     }
 }
-```
+    ```
 
 3.  Reload the NGINX Plus configuration with the following command:
 
-```bash
+    ```bash
 sudo nginx -s reload
-```
+    ```
 
 4.  Check that the stub_status module is working.
 
@@ -285,11 +304,11 @@ sudo nginx -s reload
         Plus” component and select the “NGINX HTTP” access method.
         Append “/basic_status” to the end of the address.
 
-![stub_status data](media/image13.png)
+    ![stub_status data](media/image13.png)
 
 5.  Refresh the instance details in the NGINX One console.
 
-![NGINX One Console showing a configuration recommendation.](media/image14.png)
+    ![NGINX One Console showing a configuration recommendation.](media/image14.png)
 
 Notice that NGINX One has identified a potential configuration issue:
 the newly-added stub_status page is open to the world. We can remediate
@@ -298,24 +317,24 @@ this by adding an ACL to the /basic_status location block.
 6.  Edit the “/etc/nginx/conf.d/demo.conf”again and update the
     /basic_status location block to match the following:
 
-```
+    ```
 location = /basic_status {  
     stub_status;  
     allow 10.0.0.0/8;  
     deny all;  
 }
-```
+    ```
 
 7.  Reload the NGINX Plus configuration with the following command:
 
-```bash
+    ```bash
 sudo nginx -s reload
-```
+    ```
 
 8.  Refresh the instance details in the NGINX One console. You should
     see that the configuration recommendation is no longer shown.
 
-![Configuration recommendation cleared.](media/image15.png)
+    ![Configuration recommendation cleared.](media/image15.png)
 
 ## Adding a TLS certificate
 
@@ -323,15 +342,15 @@ sudo nginx -s reload
     “/etc/nginx/conf.d/demo.conf” file again and add the following to
     the server block:
 
-```
+    ```
 listen 443 ssl;  
 ssl_certificate /etc/nginx/ssl/nginx.crt;  
 ssl_certificate_key /etc/nginx/ssl/nginx.key;
-```
+    ```
 
-The entire file should now look as follows:
+    The entire file should now look as follows:
 
-```
+    ```
 server {  
     listen 80 default_server;  
     server_name app_server;  
@@ -363,13 +382,13 @@ server {
         deny all;  
     }  
 }
-```
+    ```
 
 2.  Reload the NGINX Plus configuration with the following command:
 
-```bash
+    ```bash
 sudo nginx -s reload
-```
+    ```
 
 3.  Refresh the instance status in the NGINX One console. You should now
     see the certificate, and the validity status, as well as a new
@@ -379,14 +398,14 @@ sudo nginx -s reload
     “View Configuration” link in the “Configuration Recommendations”
     section. Currently NGINX One can only view configurations.
 
-![Certificate status](media/image16.png)
+    ![Certificate status](media/image16.png)
 
 5.  Select the “demo.conf” file from the file picker. Note the blue dots
     and the number “1” next to demo.conf; the configuration viewer
     highlights the location(s) of any recommendations it has for the
     NGINX configuration.
 
-![Configuration Viewer](media/image17.png)
+    ![Configuration Viewer](media/image17.png)
 
 # Lab 4: NGINX OSS
 
@@ -407,13 +426,19 @@ host with the package maintainer’s version of NGINX installed.
 
 4.  Click “Generate”
 
-![Data Plane Key Generation](media/image18.png)
+    ![Data Plane Key Generation](media/image18.png)
+    
+    > :point_right: **Note:** You are working in a shared tenant; keep
+    > track of your resources, and be careful not to accidently modify
+    > anyone else's.
 
 5.  The Data Plane Key will be displayed. Click the “Copy” icon to copy
-    the key to the clipboard. **SAVE THIS KEY SOMEWHERE SAFE.** There is
-    no way to retrieve the key after you click close.
+    the key to the clipboard.
+        
+    > :warning: **Warning:** *SAVE THIS KEY SOMEWHERE SAFE.* There is
+    > no way to retrieve the key after you click close.
 
-![Data Plane Key](media/image9.png)
+    ![Data Plane Key](media/image9.png)
 
 ## Installing NGINX Agent
 
@@ -421,9 +446,9 @@ host with the package maintainer’s version of NGINX installed.
     SSH or through the jumphost. If connecting through the jumphost, the
     SSH command will be:
 
-```bash
+    ```bash
 ssh ubuntu@10.1.1.6
-```
+    ```
 
 2.  Because the hostname is used as the name of the instance in NGINX
     One, you should change the hostname to something that identifies it
@@ -435,9 +460,9 @@ ssh ubuntu@10.1.1.6
     previous hostname unless you log out and log back in. This does not
     affect the lab.
 
-```bash
+    ```bash
 sudo hostname <yourname>-techxchange-nginx-oss
-```
+    ```
 
 3.  Observe the running NGINX instance on this machine.
 
@@ -447,7 +472,7 @@ sudo hostname <yourname>-techxchange-nginx-oss
     2.  If you are connecting directly through UDF, locate the “NGINX
         OSS” component and select the “NGINX HTTP” access method.
 
-![NGINX OSS Demo page](media/image19.png)
+    ![NGINX OSS Demo page](media/image19.png)
 
 4.  From the NGINX OSS instance, run the following command to install
     the NGINX Agent. Substitute \<data plane key\> with the key you
@@ -457,14 +482,14 @@ sudo hostname <yourname>-techxchange-nginx-oss
     the agent to connect to and the instance will appear as “Offline”.
     If this occurs, return to step 1 and create a new Data Plane Key.
 
-```
+    ```
 curl https://agent.connect.nginx.com/nginx-agent/install \|
 DATA_PLANE_KEY="<data plane key>" sh -s -- -y
-```
-The install script will install any necessary dependencies, and install
-the NGINX Agent with the appropriate settings for your system. You will
-see a warning about “stub_status” not being configured. You can ignore
-that warning.
+    ```
+    The install script will install any necessary dependencies, and install
+    the NGINX Agent with the appropriate settings for your system. You will
+    see a warning about “stub_status” not being configured. You can ignore
+    that warning.
 
 5.  Return to the NGINX One console. From the left menu in the “Manage”
     section, click “Instances”. You should see your new instance in the
@@ -472,17 +497,17 @@ that warning.
 
 6.  Click its hostname to view the instance details.
 
-![A screenshot of a computer Description automatically generated](media/image20.png)
+    ![A screenshot of a computer Description automatically generated](media/image20.png)
 
 7.  Explore the instance details.
 
-![Instance Details](media/image21.png)
+    ![Instance Details](media/image21.png)
 
-Note that this instance has a different set of configuration
-recommendations than the vanilla NGINX Plus instance did. Package
-maintainers may ship NGINX with their own sets of defaults, which may or
-may not align with best practices. NGINX One provides a centralized view
-of such recommendations across the organization.
+    Note that this instance has a different set of configuration
+    recommendations than the vanilla NGINX Plus instance did. Package
+    maintainers may ship NGINX with their own sets of defaults, which may or
+    may not align with best practices. NGINX One provides a centralized view
+    of such recommendations across the organization.
 
 # Lab Cleanup
 
@@ -490,27 +515,31 @@ of such recommendations across the organization.
     section, select “Data Plane Keys”
 
 2.  Select the context menu for the Data Plane Key for your NGINX OSS
-    instance, and select “Revoke”. **Make sure you are deleting your own
-    instance and not someone else’s.**
+    instance, and select “Revoke”. 
+    
+    > :warning: **Warning:** Make sure you are revoking your own
+    > key and not someone else’s.
 
-![Revoking a Data Plane Key](media/image22.png)
+    ![Revoking a Data Plane Key](media/image22.png)
 
 3.  Confirm the revocation.
 
-![Confirming the revocation](media/image23.png)
+    ![Confirming the revocation](media/image23.png)
 
 4.  Repeat steps 2 and 3 for the NGINX Plus instance.
 
 5.  From the left-hand menu in the “Manage” section, select “Instances”.
 
 6.  Select the context menu for the NGINX OSS instance, and select
-    “Delete”. **Make sure you are deleting your own instance and not
-    someone else’s.**
+    “Delete”. 
+    
+    > :warning: **Warning:** Make sure you are deleting your own 
+    > instance and not someone else’s.
 
-![Deleting an instance](media/image24.png)
+    ![Deleting an instance](media/image24.png)
 
 7.  Confirm the deletion.
 
-![Confirming the deletion](media/image25.png)
+    ![Confirming the deletion](media/image25.png)
 
 8.  Repeat steps 6 and 7 for the NGINX Plus instance.
