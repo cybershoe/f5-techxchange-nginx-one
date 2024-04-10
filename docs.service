@@ -9,9 +9,9 @@ Type=oneshot
 RemainAfterExit=yes
 
 RuntimeDirectory=docs
-
-ExecStartPre=/usr/bin/git clone git@github.com:cybershoe/f5-techxchange-nginx-one.git /var/run/docs
-ExecStart=/usr/bin/docker-compose -f /var/run/docs/docker-compose.yml -e DOCS_PATH=/var/run/docs/docs up -d
+Environment="DOCS_PATH=/var/run/docs/docs"
+ExecStartPre=/usr/bin/git clone -c "core.sshCommand=ssh -i /etc/compose/deploy.rsa" git@github.com:cybershoe/f5-techxchange-nginx-one.git /var/run/docs
+ExecStart=/usr/bin/docker-compose -f /var/run/docs/docker-compose.yml up -d
 
 ExecStop=/usr/bin/docker-compose -f /var/run/docs/docker-compose.yml down
 
